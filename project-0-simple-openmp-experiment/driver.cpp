@@ -4,8 +4,8 @@
 #include <math.h>
 
 #define NUMT	         4	// number of threads to use
-#define SIZE       	??	// array size -- you get to decide
-#define NUMTRIES        ??	// how many times to run the timing -- you get to decide
+#define SIZE       	33 // array size -- you get to decide
+#define NUMTRIES        33	// how many times to run the timing -- you get to decide
 
 float A[SIZE];
 float B[SIZE];
