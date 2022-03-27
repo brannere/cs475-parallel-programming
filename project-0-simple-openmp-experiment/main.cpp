@@ -57,7 +57,8 @@ main(int argc, char* argv[])
                         maxMegaMults = megaMults;
         }
 
-        printf( "Peak Performance = %8.2lf MegaMults/Sec\n", maxMegaMults );
+        fprintf(stderr, "Peak Performance in MegaMults/Sec\n");
+        fprintf(stdout, "%8.2lf\n", maxMegaMults );
 
 	// note: %lf stands for "long float", which is how printf prints a "double"
 	//        %d stands for "decimal integer", not "double"
