@@ -1,6 +1,6 @@
 #!/bin/bash
 
-array_size=16384
+array_size=100000
 num_trials=10000
 
 make clean
