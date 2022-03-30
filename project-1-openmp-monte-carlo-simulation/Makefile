@@ -1,4 +1,5 @@
-CC = /opt/homebrew/opt/llvm/bin/clang -lc++ -fopenmp -L /opt/homebrew/lib 
+#CC = /opt/homebrew/opt/llvm/bin/clang -lc++ -fopenmp -L /opt/homebrew/lib 
+CC = g++ -fopenmp 
 exe_file = run
 
 
