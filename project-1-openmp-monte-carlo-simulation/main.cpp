@@ -155,13 +155,12 @@ int main() {
                 } // for( # of  monte carlo trials )
 
                 double time1 = omp_get_wtime( );
-                        if(time1 - time0 > 0){
+                if(time1 - time0 > 0){
 
                         double megaTrialsPerSecond = (double)NUMTRIALS / ( time1 - time0 ) / 1000000.;
                         if( megaTrialsPerSecond > maxPerformance )
                                 maxPerformance = megaTrialsPerSecond;
                 }
-                else maxPerformance = 0;
 
         } // for ( # of timing tries )
         
