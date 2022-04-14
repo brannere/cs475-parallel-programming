@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <omp.h>
+#include <float.h>
 
 // print debugging messages?
 #ifndef DEBUG
@@ -114,7 +115,7 @@ int main() {
 
         // get ready to record the maximum performance and the probability:
         double  maxPerformance = 0.;    // must be declared outside the NUMTIMES loop
-        double minSpeed = 0;
+        double minSpeed = DBL_MAX;
         int     numHits;                // must be declared outside the NUMTIMES loop
 
         // looking for the maximum performance:
@@ -155,12 +156,14 @@ int main() {
                 } // for( # of  monte carlo trials )
 
                 double time1 = omp_get_wtime( );
-                minSpeed += (time1-time0);
+                
                 if(time1 - time0 > 0){
 
                         double megaTrialsPerSecond = (double)NUMTRIALS / ( time1 - time0 ) / 1000000.;
                         if( megaTrialsPerSecond > maxPerformance )
                                 maxPerformance = megaTrialsPerSecond;
+                        if(time1 - time0 < minSpeed && time1-time0 > 0)
+                                minSpeed = time1-time0;
                 }
 
 
@@ -168,7 +171,7 @@ int main() {
         
         double probability = (double)numHits/(double)( NUMTRIALS );        // just get for last NUMTIMES run
         fprintf(stdout, "%2d,%8d,%6.2f%%,%6.2lf,%f\n",
-                NUMT, NUMTRIALS, 100.*probability, maxPerformance, minSpeed/(NUMTRIES*NUMTRIALS)); 
-        fprintf(stderr, "%2d threads : %8d trials ; probability = %6.2f%% ; megatrials/sec = %6.2lf ; avg runtime = %f\n",
-                NUMT, NUMTRIALS, 100.*probability, maxPerformance, minSpeed/(NUMTRIES*NUMTRIALS)); 
+                NUMT, NUMTRIALS, 100.*probability, maxPerformance, minSpeed); 
+        fprintf(stderr, "%2d threads : %8d trials ; probability = %6.2f%% ; megatrials/sec = %6.2lf ; minspeed = %f\n",
+                NUMT, NUMTRIALS, 100.*probability, maxPerformance, minSpeed); 
 }
