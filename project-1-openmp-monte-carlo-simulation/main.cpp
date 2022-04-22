@@ -64,15 +64,15 @@ Ranf( int ilow, int ihigh )
 void
 TimeOfDaySeed( )
 {
-	struct tm y2k = { 0 };
-	y2k.tm_hour = 0;   y2k.tm_min = 0; y2k.tm_sec = 0;
-	y2k.tm_year = 100; y2k.tm_mon = 0; y2k.tm_mday = 1;
+  struct tm y2k = { 0 };
+  y2k.tm_hour = 0;   y2k.tm_min = 0; y2k.tm_sec = 0;
+  y2k.tm_year = 100; y2k.tm_mon = 0; y2k.tm_mday = 1;
 
-	time_t  timer;
-	time( &timer );
-	double seconds = difftime( timer, mktime(&y2k) );
-	unsigned int seed = (unsigned int)( 1000.*seconds );    // milliseconds
-	srand( seed );
+  time_t  timer;
+  time( &timer );
+  double seconds = difftime( timer, mktime(&y2k) );
+  unsigned int seed = (unsigned int)( 1000.*seconds );    // milliseconds
+  srand( seed );
 }
 
 // ranges for the random numbers:
@@ -82,7 +82,7 @@ TimeOfDaySeed( )
 inline
 double Radians( double d )
 {
-	return (M_PI/180.f) * d;
+  return (M_PI/180.f) * d;
 }
 
 
@@ -141,13 +141,13 @@ int main() {
                         // how long until the snowball reaches the y depth:
                         double t = ty/svy;
 
-			// how far the truck has moved in x in that amount of time:
+      // how far the truck has moved in x in that amount of time:
                         double truckx = tx + txv * t;
 
-			// how far the snowball has moved in x in that amount of time:
+      // how far the snowball has moved in x in that amount of time:
                         double sbx = svx * t;
 
-			// does the snowball hit the truck (just check x distances, not height):
+      // does the snowball hit the truck (just check x distances, not height):
                         if( fabs(sbx-truckx) <  20.)
                         {
                                 numHits++;
