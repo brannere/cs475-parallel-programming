@@ -80,14 +80,17 @@ int main( int argc, char *argv[ ] )
 
 	float fullTileArea = (  ( ( XMAX - XMIN )/(float)(NUMNODES-1) )  *
 				( ( YMAX - YMIN )/(float)(NUMNODES-1) )  );
+	double maxPerformance = 0.;
 
 	// sum up the weighted heights into the variable "volume"
 	// using an OpenMP for-loop and a reduction:
 
 	/* NUMNODES^2 height samples */
+	double time0 = omp_get_wtime( );
 	#pragma omp parallel for default(none) shared(fullTileArea) reduction(+:volume_sum)
 	for( int i = 0; i < NUMNODES*NUMNODES; i++ )
 	{
+		
 		int iu = i % NUMNODES;
 		int iv = i / NUMNODES;
 		float z = Height( iu, iv );
@@ -102,8 +105,12 @@ int main( int argc, char *argv[ ] )
 		}
 		volume_sum += vol;
 
-		// . . .
 	}
-	fprintf(stdout, "Volume %f\n", volume_sum*2);
-	// ?????
+	double time1 = omp_get_wtime( );
+	double megaHeightComputePerSecond = (time1 - time0);
+	maxPerformance = megaHeightComputePerSecond;
+	
+	// fprintf(stdout, "Volume %f\n", volume_sum*2);
+	fprintf(stderr, "%2d threads : %8d nodes ; volume = %f ; megatrials/sec = %6.2lf\n",
+                NUMT, NUMNODES, volume_sum*2, maxPerformance); 
 }
