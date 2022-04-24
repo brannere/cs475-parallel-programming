@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <omp.h>
-#include <float.h>
+
 
 // how many tries to discover the maximum performance:
 #ifndef NUMNODES
@@ -21,7 +21,7 @@
 // {
 // 	int iu = i % NUMNODES;
 // 	int iv = i / NUMNODES;
-// 	float z = Height( iu, iv );
+// 	double z = Height( iu, iv );
 // 	. . .
 // }
 
@@ -32,24 +32,24 @@
 
 // The code to evaluate the height at a given <i>iu</i> and <i>iv</i> is:
 
-const float N = 2.5f;
-const float R = 1.2f;
+const double N = 2.5f;
+const double R = 1.2f;
 
 //  . . .
 
-float
+double
 Height( int iu, int iv )	// iu,iv = 0 .. NUMNODES-1
 {
-	float x = -1.  +  2.*(float)iu /(float)(NUMNODES-1);	// -1. to +1.
-	float y = -1.  +  2.*(float)iv /(float)(NUMNODES-1);	// -1. to +1.
+	double x = -1.  +  2.*(double)iu /(double)(NUMNODES-1);	// -1. to +1.
+	double y = -1.  +  2.*(double)iv /(double)(NUMNODES-1);	// -1. to +1.
 
-	float xn = pow( fabs(x), (double)N );
-	float yn = pow( fabs(y), (double)N );
-	float rn = pow( fabs(R), (double)N );
-	float r = rn - xn - yn;
+	double xn = pow( fabs(x), (double)N );
+	double yn = pow( fabs(y), (double)N );
+	double rn = pow( fabs(R), (double)N );
+	double r = rn - xn - yn;
 	if( r <= 0. )
 	        return 0.;
-	float height = pow( r, 1./(double)N );
+	double height = pow( r, 1./(double)N );
 	return height;
 }
 
@@ -61,9 +61,9 @@ Height( int iu, int iv )	// iu,iv = 0 .. NUMNODES-1
 #define YMIN     -1.
 #define YMAX      1.
 
-float Height( int, int );	// function prototype
+double Height( int, int );	// function prototype
 
-float volume(float area, float height){
+double volume(double area, double height){
 	return area * height;
 }
 
@@ -73,13 +73,13 @@ int main( int argc, char *argv[ ] )
         fprintf( stderr, "No OpenMP support!\n" );
         return 1;
 	#endif
-	float volume_sum = 0.;
-
+	double volume_sum = 0.;
+	omp_set_num_threads( NUMT );
 	// the area of a single full-sized tile:
 	// (not all tiles are full-sized, though)
 
-	float fullTileArea = (  ( ( XMAX - XMIN )/(float)(NUMNODES-1) )  *
-				( ( YMAX - YMIN )/(float)(NUMNODES-1) )  );
+	double fullTileArea = (  ( ( XMAX - XMIN )/(double)(NUMNODES-1) )  *
+				( ( YMAX - YMIN )/(double)(NUMNODES-1) )  );
 	double maxPerformance = 0.;
 
 	// sum up the weighted heights into the variable "volume"
@@ -88,13 +88,13 @@ int main( int argc, char *argv[ ] )
 	/* NUMNODES^2 height samples */
 	double time0 = omp_get_wtime( );
 	#pragma omp parallel for default(none) shared(fullTileArea) reduction(+:volume_sum)
-	for( int i = 0; i < NUMNODES*NUMNODES; i++ )
+	for( unsigned long long int i = 0; i < NUMNODES*NUMNODES; i++ )
 	{
 		
-		int iu = i % NUMNODES;
-		int iv = i / NUMNODES;
-		float z = Height( iu, iv );
-		float vol = volume(z, fullTileArea);
+		unsigned long long int iu = i % NUMNODES;
+		unsigned long long int iv = i / NUMNODES;
+		double z = Height( iu, iv );
+		double vol = volume(z, fullTileArea);
 		/* Corner */
 		if(iu == 0 && iv == 0){
 			vol = vol * 0.25;
@@ -110,7 +110,9 @@ int main( int argc, char *argv[ ] )
 	double megaHeightComputePerSecond = (time1 - time0);
 	maxPerformance = megaHeightComputePerSecond;
 	
-	// fprintf(stdout, "Volume %f\n", volume_sum*2);
-	fprintf(stderr, "%2d threads : %8d nodes ; volume = %f ; megatrials/sec = %6.2lf\n",
+	fprintf(stdout, "%2d,%8d,%f,%6.2lf\n",
+                NUMT, NUMNODES, volume_sum*2, maxPerformance); 
+
+	fprintf(stderr, "%2d threads : %8d nodes ; volume = %f ; execution time = %6.2lf\n",
                 NUMT, NUMNODES, volume_sum*2, maxPerformance); 
 }
