@@ -11,6 +11,10 @@
 #define NUMNODES	1000
 #endif
 
+#ifndef NUMT
+#define NUMT	4
+#endif
+
 // You could use a single for-loop over all the nodes that looks like this:
 // #pragma omp parallel for default(none) . . . // reduction here
 // for( int i = 0; i < NUMNODES*NUMNODES; i++ )
@@ -81,6 +85,7 @@ int main( int argc, char *argv[ ] )
 	// using an OpenMP for-loop and a reduction:
 
 	/* NUMNODES^2 height samples */
+	#pragma omp parallel for default(none) shared(fullTileArea) reduction(+:volume_sum)
 	for( int i = 0; i < NUMNODES*NUMNODES; i++ )
 	{
 		int iu = i % NUMNODES;
