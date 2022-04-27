@@ -114,9 +114,10 @@ int main( int argc, char *argv[ ] )
 	double dt = ( time1 - time0 ) / (double)1.;
  	double performance = (double)(NUMNODES*NUMNODES)/dt/1000000.;
 	
-	fprintf(stdout, "%2d,%8d,%f,%6.2lf\n",
-                NUMT, NUMNODES, volume_sum*2, performance); 
+	fprintf(stdout, "%2d,%8d,%f,%6.2lf,%f\n",
+                NUMT, NUMNODES, volume_sum*2, performance,time1-time0); 
 
+	fprintf(stderr, "time: %f\n", time1-time0);
 	fprintf(stderr, "%2d threads : %8d nodes ; volume = %f ; MegaHeights computer per second = %6.2lf\n",
                 NUMT, NUMNODES, volume_sum*2, performance); 
 }
