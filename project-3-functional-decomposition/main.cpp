@@ -12,7 +12,7 @@ float	NowPrecip = 1;		// inches of rain per month
 float	NowTemp = 32;		// temperature this month
 float	NowHeight = 1.;		// grain height in inches
 int	NowNumDeer = 1;		// number of deer in the current population
-int NowNumAlien = 0; // number of alien
+int NowRadiation = 0;
 const float GRAIN_GROWS_PER_MONTH =		9.0;
 const float ONE_DEER_EATS_PER_MONTH =		1.0;
 const float AVG_PRECIP_PER_MONTH =		7.0;	// average
@@ -133,7 +133,7 @@ void Watcher(){
 		(5./9.)*(NowTemp-32),
 		NowHeight*2.54,
 		NowNumDeer,NowPrecip,
-		NowNumAlien,
+		NowRadiation,
 		NowMonth,NowYear);
 
 		float ang = (  30.*(float)NowMonth + 15.  ) * ( M_PI / 180. );
@@ -158,16 +158,36 @@ void Watcher(){
 }
 void MyAgent(){
 	/* 	
-			Aliens show up in the summer. They ear deer. Each alien eats 
-			at most two deer. 
+			Less grain means less food. Hungry workers means 
+			more chance to make mistakes when operating 
+			RBMK-1000 Nuclear reactors. So, when there is less grain,
+			there are random Cherenobyl 2.0 events that are more
+			likely to happen (a lot of radiation).
+
+			Assuming that grains are not affected by radiation,
+			the deer population becomes 0. 
+			The fallout only stays for one month.
 		*/
 	
 	while( NowYear < 2028 ){
 
 		// DoneComputing barrier:
-		int nextAlien = NowNumAlien;
-
+		int nextDeer = NowNumDeer;
+		int nextRadiation = NowRadiation;
+		bool isCheronobyl = false;
+		int roll1 = Ranf(&seed, 0, (int)NowHeight);
+		int roll2 = Ranf(&seed, 0, (int)NowHeight);
+		if(roll1 == roll2) isCheronobyl = true;
+		if(isCheronobyl){
+			nextDeer = 0;
+			nextRadiation = 100;
+		}
+		else{
+			nextRadiation = 0;
+		}
 		#pragma omp barrier
+		NowNumDeer = nextDeer;
+		NowRadiation = nextRadiation;
 		// DoneAssigning barrier:
 		#pragma omp barrier
 
