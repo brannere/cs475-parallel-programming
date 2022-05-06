@@ -127,7 +127,7 @@ void Watcher(){
 		// DoneAssigning barrier:
 		#pragma omp barrier
 		
-		fprintf(stdout, "%f,%f,%d,%f,%d\n", NowTemp,NowHeight,NowNumDeer,NowPrecip,NowYear);
+		fprintf(stdout, "%f,%f,%d,%f,%d,%d\n", NowTemp,NowHeight,NowNumDeer,NowPrecip,NowMonth,NowYear);
 
 		float ang = (  30.*(float)NowMonth + 15.  ) * ( M_PI / 180. );
 
@@ -139,13 +139,11 @@ void Watcher(){
 		if( NowPrecip < 0. )
 			NowPrecip = 0.;
 		
-		if(NowMonth < 12){
-			NowMonth +=1;
-		}
-		else if(NowMonth >= 12){
+
+		if(NowMonth % 12 == 0 && NowMonth != 0){
 			NowYear += 1;
-			NowMonth = 0;
 		}
+		NowMonth +=1;
 		// DonePrinting barrier:
 		#pragma omp barrier
 	
@@ -167,7 +165,7 @@ void MyAgent(){
 
 int main(){
 
-	fprintf(stdout, "temp,grain height,num deer,percip,year\n");
+	fprintf(stdout, "temp,grain height,num deer,percip,month,year\n");
 	omp_set_num_threads( 3 );	// same as # of sections
 	#pragma omp parallel sections
 	{
