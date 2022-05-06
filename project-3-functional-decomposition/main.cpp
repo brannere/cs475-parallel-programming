@@ -80,8 +80,10 @@ void Deer(){
 		  nextNumDeer--;
 		}
 
+		if(NowRadiation == 100) nextNumDeer = 0;
 		if( nextNumDeer < 0 )
 		 nextNumDeer = 0;
+		
 
 		#pragma omp barrier
 		NowNumDeer = nextNumDeer;
@@ -186,7 +188,6 @@ void MyAgent(){
 			nextRadiation = 0;
 		}
 		#pragma omp barrier
-		NowNumDeer = nextDeer;
 		NowRadiation = nextRadiation;
 		// DoneAssigning barrier:
 		#pragma omp barrier
@@ -198,7 +199,7 @@ void MyAgent(){
 
 int main(){
 
-	fprintf(stdout, "temp,grain height,num deer,percip,num alien,month,year\n");
+	fprintf(stdout, "temp,grain height,num deer,percip,radiaton,month,year\n");
 	omp_set_num_threads( 4 );	// same as # of sections
 	#pragma omp parallel sections
 	{
