@@ -150,11 +150,30 @@ void Watcher(){
 	}
 }
 void MyAgent(){
+	/* 	
+			Less grain means less food. Hungry workers means 
+			more chance to make mistakes when operating 
+			RBMK-1000 Nuclear reactors. So, when there is less grain,
+			there are random Cherenobyl 2.0 events that are more
+			likely to happen (a lot of radiation).
+
+			Assuming that grains are not affected by radiation,
+			the deer population becomes 0.
+		*/
+	
 	while( NowYear < 2028 ){
 
 		// DoneComputing barrier:
+		int nextDeer = NowNumDeer;
+		bool isCheronobyl = false;
+		int roll1 = Ranf(&seed, 0, (int)NowHeight);
+		int roll2 = Ranf(&seed, 0, (int)NowHeight);
+		if(roll1 == roll2) isCheronobyl = true;
+		if(isCheronobyl){
+			nextDeer = 0;
+		}
 		#pragma omp barrier
-		
+		NowNumDeer = nextDeer;
 		// DoneAssigning barrier:
 		#pragma omp barrier
 
@@ -166,7 +185,7 @@ void MyAgent(){
 int main(){
 
 	fprintf(stdout, "temp,grain height,num deer,percip,month,year\n");
-	omp_set_num_threads( 3 );	// same as # of sections
+	omp_set_num_threads( 4 );	// same as # of sections
 	#pragma omp parallel sections
 	{
 	#pragma omp section
@@ -184,10 +203,10 @@ int main(){
 		Watcher( );
 	}
 
-	// #pragma omp section
-	// {
-	// 	MyAgent( );	// your own
-	// }
+	#pragma omp section
+	{
+		MyAgent( );	// your own
+	}
 	
 }       // implied barrier -- all functions must return in order
 	// to allow any of them to get past here
