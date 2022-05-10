@@ -38,8 +38,8 @@ main( int argc, char *argv[ ] )
 		A[i] = sqrtf( (float)(i+1) );
 		B[i] = sqrtf( (float)(i+1) );
 	}
-	fprintf( stderr, "%12d\t", ARRAYSIZE );
-	fprintf( stdout, "%12d\t,", ARRAYSIZE );
+	// fprintf( stderr, "%12d\t", ARRAYSIZE );
+	fprintf( stdout, "%12d,", ARRAYSIZE );
 
 	double maxPerformance = 0.;
 	for( int t = 0; t < NUMTRIES; t++ )
@@ -54,8 +54,8 @@ main( int argc, char *argv[ ] )
 	double megaMults = maxPerformance / 1000000.;
 	double nonMegaMults = megaMults;
 
-	fprintf( stderr, "N %10.2lf\t", megaMults );
-	fprintf( stdout, "%10.2lf\t,", megaMults );
+	// fprintf( stderr, "N %10.2lf\t", megaMults );
+	// fprintf( stdout, "%10.2lf,", megaMults );
 	double mmn = megaMults;
 
 
@@ -70,12 +70,12 @@ main( int argc, char *argv[ ] )
 			maxPerformance = perf;
 	}
 	megaMults = maxPerformance / 1000000.;
-	fprintf( stderr, "S %10.2lf\t", megaMults );
-	fprintf( stdout, "%10.2lf\t,", megaMults );
+	// fprintf( stderr, "S %10.2lf\t", megaMults );
+	// fprintf( stdout, "%10.2lf\t,", megaMults );
 	double mms = megaMults;
 	double speedup = mms/mmn;
-	fprintf( stderr, "(%6.2lf)\t", speedup );
-	fprintf( stdout, "%6.2lf\t,", speedup );
+	// fprintf( stderr, "(%6.2lf)\t", speedup );
+	fprintf( stdout, "%6.2lf,", speedup );
 
 
 
@@ -93,8 +93,8 @@ main( int argc, char *argv[ ] )
 			maxPerformance = perf;
 	}
 	double megaMultAdds = maxPerformance / 1000000.;
-	fprintf( stderr, "N %10.2lf\t", megaMultAdds );
-	fprintf( stdout, "%10.2lf\t,", megaMultAdds );
+	// fprintf( stderr, "N %10.2lf\t", megaMultAdds );
+	// fprintf( stdout, "%10.2lf\t,", megaMultAdds );
 	mmn = megaMultAdds;
 
 
@@ -109,13 +109,13 @@ main( int argc, char *argv[ ] )
 			maxPerformance = perf;
 	}
 	megaMultAdds = maxPerformance / 1000000.;
-	fprintf( stderr, "S %10.2lf\t", megaMultAdds );
-	fprintf( stdout, "%10.2lf\t,", megaMultAdds );
+	// fprintf( stderr, "S %10.2lf\t", megaMultAdds );
+	// fprintf( stdout, "%10.2lf\t,", megaMultAdds );
 	mms = megaMultAdds;
 	speedup = mms/mmn;
-	fprintf( stderr, "(%6.2lf)\n", speedup );
+	// fprintf( stderr, "(%6.2lf)\n", speedup );
 	fprintf( stdout, "%6.2lf\n", speedup );
-	fprintf( stderr, "[ %8.1f , %8.1f , %8.1f ]\n", C[ARRAYSIZE-1], sumn, sums );
+	// fprintf( stderr, "[ %8.1f , %8.1f , %8.1f ]\n", C[ARRAYSIZE-1], sumn, sums );
 
 	return 0;
 }
@@ -125,7 +125,7 @@ void
 NonSimdMul( float *A, float *B, float *C, int n )
 {
 	for(int i = 0; i < n; i++){
-		C[i] = A[i] * B[i];
+		C[i] = (A[i] * B[i]);
 	}
 }
 
@@ -134,7 +134,7 @@ NonSimdMulSum( float *A, float *B, int n )
 {
 	float sum = 0;
 	for(int i = 0; i < n; i++){
-		sum = sum + (A[i] * B[i]);
+		sum += (A[i] * B[i]);
 	}
 	return sum;
 }
