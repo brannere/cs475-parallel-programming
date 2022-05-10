@@ -75,7 +75,7 @@ main( int argc, char *argv[ ] )
 	double mms = megaMults;
 	double speedup = mms/mmn;
 	fprintf( stderr, "(%6.2lf)\t", speedup );
-	fprintf( stdout, "(%6.2lf)\t,", speedup );
+	fprintf( stdout, "%6.2lf\t,", speedup );
 
 
 
@@ -110,12 +110,12 @@ main( int argc, char *argv[ ] )
 	}
 	megaMultAdds = maxPerformance / 1000000.;
 	fprintf( stderr, "S %10.2lf\t", megaMultAdds );
-	fprintf( stdout, "S %10.2lf\t,", megaMultAdds );
+	fprintf( stdout, "%10.2lf\t,", megaMultAdds );
 	mms = megaMultAdds;
 	speedup = mms/mmn;
 	fprintf( stderr, "(%6.2lf)\n", speedup );
-	fprintf( stdout, "(%6.2lf)\n", speedup );
-	//fprintf( stderr, "[ %8.1f , %8.1f , %8.1f ]\n", C[ARRAYSIZE-1], sumn, sums );
+	fprintf( stdout, "%6.2lf\n", speedup );
+	fprintf( stderr, "[ %8.1f , %8.1f , %8.1f ]\n", C[ARRAYSIZE-1], sumn, sums );
 
 	return 0;
 }
@@ -124,12 +124,19 @@ main( int argc, char *argv[ ] )
 void
 NonSimdMul( float *A, float *B, float *C, int n )
 {
-
+	for(int i = 0; i < n; i++){
+		C[i] = A[i] * B[i];
+	}
 }
 
 float
 NonSimdMulSum( float *A, float *B, int n )
 {
+	float sum = 0;
+	for(int i = 0; i < n; i++){
+		sum = sum + (A[i] * B[i]);
+	}
+	return sum;
 }
 
 
