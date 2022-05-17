@@ -119,8 +119,6 @@ main( int argc, char *argv[ ] )
 
 	return 0;
 }
-
-
 void
 NonSimdMul( float *A, float *B, float *C, int n )
 {
