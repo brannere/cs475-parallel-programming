@@ -94,7 +94,8 @@ Radians( float d )
 
 __global__
 void
-MonteCarlo( IN float *dtxs, IN float *dtys, IN float *dtxvs, IN float *dsvs, IN float *dsths, IN float *dhalflens, OUT int *dhits )
+MonteCarlo( IN float *dtxs, IN float *dtys, IN float *dtxvs, 
+						IN float *dsvs, IN float *dsths, IN float *dhalflens, OUT int *dhits )
 {
 	//unsigned int numItems = blockDim.x;
 	//unsigned int wgNum    = blockIdx.x;
@@ -104,12 +105,31 @@ MonteCarlo( IN float *dtxs, IN float *dtys, IN float *dtxvs, IN float *dsvs, IN 
 	dhits[gid] = 0;
 
 	// randomize everything:
-	float tx   = dtxs[gid];
-	?????
+	float tx   		= dtxs[gid];
+	float ty   		= dtys[gid];
+	float txv   	= dtxvs[gid];
+	float sv   		= dtsvs[gid];
+	float sthd   	= dsths[gid];
+	float halflen = dhalflens[gid];
+	
+	
+	float sthr = Radians(sthd);
+	
+	float svx   	= sv * cos(sthr);
+	float svy   	= sv * sin(sthr);
 
 	// how long until the snowball reaches the y depth:
-	?????
-	if( ????? )
+  double t = ty/svy;
+
+	// how far the truck has moved in x in that amount of time:
+	double truckx = tx + txv * t;
+
+  // how far the snowball has moved in x in that amount of time:
+	double sbx = svx * t;
+	
+	
+	// ?????
+	if( fabs(sbx-truckx) <  halflen )
 	{
 		dhits[gid] = 1;
 	}
@@ -155,16 +175,39 @@ main( int argc, char* argv[ ] )
 	//cudaError_t status;
 	cudaMalloc( (void **)(&dtxs),   NUMTRIALS*sizeof(float) );
 	CudaCheckError( );
+	cudaMalloc( (void **)(&dtys),   NUMTRIALS*sizeof(float) );
+	CudaCheckError( );
+	cudaMalloc( (void **)(&dtxvs),   NUMTRIALS*sizeof(float) );
+	CudaCheckError( );
+	cudaMalloc( (void **)(&dsvs),   NUMTRIALS*sizeof(float) );
+	CudaCheckError( );
+	cudaMalloc( (void **)(&dsths),   NUMTRIALS*sizeof(float) );
+	CudaCheckError( );
+	cudaMalloc( (void **)(&dhalflens,   NUMTRIALS*sizeof(float) );
+	CudaCheckError( );
+	cudaMalloc( (void **)(&dhits),   NUMTRIALS*sizeof(int) );
+	CudaCheckError( );
 
-	?????
 
 
 	// copy host memory to the device:
 
 	cudaMemcpy( dtxs,  htxs,  NUMTRIALS*sizeof(float), cudaMemcpyHostToDevice );
 	CudaCheckError( );
+	cudaMemcpy( dtys,  htys,  NUMTRIALS*sizeof(float), cudaMemcpyHostToDevice );
+	CudaCheckError( );
+	cudaMemcpy( dtxvs,  htxvs,  NUMTRIALS*sizeof(float), cudaMemcpyHostToDevice );
+	CudaCheckError( );
+	cudaMemcpy( dsvs,  hsvs,  NUMTRIALS*sizeof(float), cudaMemcpyHostToDevice );
+	CudaCheckError( );
+	cudaMemcpy( dsths,  hsths,  NUMTRIALS*sizeof(float), cudaMemcpyHostToDevice );
+	CudaCheckError( );
+	cudaMemcpy( dhalflens,  hhalflens,  NUMTRIALS*sizeof(float), cudaMemcpyHostToDevice );
+	CudaCheckError( );
+	cudaMemcpy( dhits,  hhits,  NUMTRIALS*sizeof(int), cudaMemcpyHostToDevice );
+	CudaCheckError( );
 
-	?????
+
 
 	// setup the execution parameters:
 
@@ -214,7 +257,9 @@ main( int argc, char* argv[ ] )
 	// compute the sum :
 
 	int numHits = 0;
-	????
+	for(int i = 0; i < NUMTRIALS; i++){
+		numHits += dhits[i];
+	}
 
 	float probability = 100.f * (float)numHits / (float)NUMTRIALS;
 
