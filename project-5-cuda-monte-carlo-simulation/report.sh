@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "number of trials, blocksize, MegaTrials/Second, probability"
 for t in 1024 4096 16384 65536 262144 1048576 2097152 4194304
 do
   for b in 8 32 128

@@ -143,7 +143,7 @@ main( int argc, char* argv[ ] )
 {
 	TimeOfDaySeed( );
 
-	int dev = findCudaDevice(argc, (const char **)argv);
+//	int dev = findCudaDevice(argc, (const char **)argv);
 
 	
 	float *htxs  = new float [NUMTRIALS];
@@ -271,6 +271,7 @@ main( int argc, char* argv[ ] )
 	fprintf( stderr, "Number of Trials = %10d, Blocksize = %8d, MegaTrials/Second = %10.4lf, Probability = %6.2f%%\n",
 		NUMTRIALS, BLOCKSIZE, megaTrialsPerSecond, probability );
 
+	fprintf( stdout, "%10d,%8d,%10.4lf,%6.2f%%\n", NUMTRIALS, BLOCKSIZE, megaTrialsPerSecond, probability );
 	// clean up memory:
 	delete [ ] htxs;
 	delete [ ] htys;
