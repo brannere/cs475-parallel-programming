@@ -28,7 +28,7 @@
 
 
 // ranges for the random numbers:
-#define PROJECT1
+//#define PROJECT1
 
 #ifdef PROJECT1
 const float TXMIN =	-10.0;	// truck starting location in feet
@@ -108,7 +108,7 @@ MonteCarlo( IN float *dtxs, IN float *dtys, IN float *dtxvs,
 	float tx   		= dtxs[gid];
 	float ty   		= dtys[gid];
 	float txv   	= dtxvs[gid];
-	float sv   		= dtsvs[gid];
+	float sv   		= dsvs[gid];
 	float sthd   	= dsths[gid];
 	float halflen = dhalflens[gid];
 	
@@ -183,7 +183,7 @@ main( int argc, char* argv[ ] )
 	CudaCheckError( );
 	cudaMalloc( (void **)(&dsths),   NUMTRIALS*sizeof(float) );
 	CudaCheckError( );
-	cudaMalloc( (void **)(&dhalflens,   NUMTRIALS*sizeof(float) );
+	cudaMalloc( (void **)(&dhalflens),   NUMTRIALS*sizeof(float) );
 	CudaCheckError( );
 	cudaMalloc( (void **)(&dhits),   NUMTRIALS*sizeof(int) );
 	CudaCheckError( );
@@ -258,7 +258,7 @@ main( int argc, char* argv[ ] )
 
 	int numHits = 0;
 	for(int i = 0; i < NUMTRIALS; i++){
-		numHits += dhits[i];
+		numHits += hhits[i];
 	}
 
 	float probability = 100.f * (float)numHits / (float)NUMTRIALS;
