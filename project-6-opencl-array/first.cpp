@@ -14,13 +14,14 @@
 #include "CL/cl.h"
 #include "CL/cl_platform.h"
 
-
+// [1, 8*1024]
 #ifndef NMB
 #define	NMB			64
 #endif
 
-#define NUM_ELEMENTS		NMB*1024*1024
+#define NUM_ELEMENTS		NMB*1024
 
+// [8, 512]
 #ifndef LOCAL_SIZE
 #define	LOCAL_SIZE		64
 #endif
@@ -201,8 +202,8 @@ main( int argc, char *argv[ ] )
 	if( status != CL_SUCCESS )
 			fprintf( stderr, "clEnqueueReadBuffer failed\n" );
 
-	fprintf( stderr, "%8d\t%4d\t%10d\t%10.3lf GigaMultsPerSecond\n",
-		NMB, LOCAL_SIZE, NUM_WORK_GROUPS, (double)NUM_ELEMENTS/(time1-time0)/1000000000. );
+	fprintf( stderr, "%8d\t%4d\t%10d\t%10.3lf\n",
+		NUM_ELEMENTS, LOCAL_SIZE, NUM_WORK_GROUPS, (double)NUM_ELEMENTS/(time1-time0)/1000000000. );
 
 #ifdef WIN32
 	Sleep( 2000 );
