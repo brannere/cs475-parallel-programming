@@ -17,15 +17,15 @@ do
   for ls in 8 16 32 64 128 256 512
   do
     g++ -w -o first first.cpp -DNMB=$gs -DLOCAL_SIZE=$ls /usr/local/apps/cuda/10.1/lib64/libOpenCL.so.1.1 -lm -fopenmp
-    ./first >> first.csv
+    ./first >> first.csv &
     PROC1=$!
 
     g++ -w -o second second.cpp -DNMB=$gs -DLOCAL_SIZE=$ls /usr/local/apps/cuda/10.1/lib64/libOpenCL.so.1.1 -lm -fopenmp
-    ./second >> second.csv
+    ./second >> second.csv &
     PROC2=$!
 
     g++ -w -o third third.cpp -DNMB=$gs -DLOCAL_SIZE=$ls /usr/local/apps/cuda/10.1/lib64/libOpenCL.so.1.1 -lm -fopenmp
-    ./third >> third.csv
+    ./third >> third.csv &
     PROC3=$!
     wait $PROC1 $PROC2 $PROC3
   done
