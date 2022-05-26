@@ -1,0 +1,5 @@
+NUM_ELEMENTS, LOCAL_SIZE, NUM_WORK_GROUPS, GigaMultiply-Adds Per Second
+    1024,   8,       128,     0.011
+    1024,  16,        64,     0.013
+    1024,  32,        32,     0.019
+    1024,  64,        16,     0.016

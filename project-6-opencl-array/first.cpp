@@ -202,7 +202,7 @@ main( int argc, char *argv[ ] )
 	if( status != CL_SUCCESS )
 			fprintf( stderr, "clEnqueueReadBuffer failed\n" );
 
-	fprintf( stdout, "%8d\t%4d\t%10d\t%10.3lf\n",
+	fprintf( stdout, "%8d,%4d,%10d,%10.3lf\n",
 		NUM_ELEMENTS, LOCAL_SIZE, NUM_WORK_GROUPS, (double)NUM_ELEMENTS/(time1-time0)/1000000000. );
 
 #ifdef WIN32
