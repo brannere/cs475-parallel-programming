@@ -1,0 +1,7 @@
+/opt/homebrew/opt/llvm/bin/clang main.c -fopenmp -L/opt/homebrew/lib
+
+/opt/homebrew/opt/llvm/bin/clang main.c -fopenmp -L/opt/homebrew/lib
+
+-/opt/homebrew/opt/llvm/bin/clang -o printinfo printinfo.cpp /usr/local/apps/cuda/10.1/lib64/libOpenCL.so.1.1 -lm -fopenmp -L/opt/homebrew/lib
+
+
